@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TabBar } from 'react-native-tab-view';
-import Animated from 'react-native-reanimated';
-import { NavigationRoute } from 'react-navigation';
-import { MaterialTabBarProps } from '../types';
+import * as React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { TabBar } from 'react-native-tab-view'
+import Animated from 'react-native-reanimated'
+import { NavigationRoute } from 'react-navigation'
+import { MaterialTabBarProps } from '../types'
 
-type Scene = { route: NavigationRoute; focused: boolean; color: string };
+type Scene = { route: NavigationRoute; focused: boolean; color: string }
 
 export default class TabBarTop extends React.PureComponent<
   MaterialTabBarProps
@@ -17,7 +17,7 @@ export default class TabBarTop extends React.PureComponent<
     showLabel: true,
     upperCaseLabel: true,
     allowFontScaling: true,
-  };
+  }
 
   _renderLabel = ({ route, focused, color }: Scene) => {
     const {
@@ -25,13 +25,13 @@ export default class TabBarTop extends React.PureComponent<
       upperCaseLabel,
       labelStyle,
       allowFontScaling,
-    } = this.props;
+    } = this.props
 
     if (showLabel === false) {
-      return null;
+      return null
     }
 
-    const label = this.props.getLabelText({ route });
+    const label = this.props.getLabelText({ route })
 
     if (typeof label === 'string') {
       return (
@@ -41,21 +41,21 @@ export default class TabBarTop extends React.PureComponent<
         >
           {upperCaseLabel ? label.toUpperCase() : label}
         </Animated.Text>
-      );
+      )
     }
 
     if (typeof label === 'function') {
-      return label({ focused, tintColor: color });
+      return label({ focused, tintColor: color })
     }
 
-    return label;
-  };
+    return label
+  }
 
   _renderIcon = ({ route, focused, color }: Scene) => {
-    const { renderIcon, showIcon, iconStyle } = this.props;
+    const { renderIcon, showIcon, iconStyle } = this.props
 
     if (showIcon === false) {
-      return null;
+      return null
     }
 
     return (
@@ -66,8 +66,8 @@ export default class TabBarTop extends React.PureComponent<
           tintColor: color,
         })}
       </View>
-    );
-  };
+    )
+  }
 
   render() {
     const {
@@ -86,7 +86,7 @@ export default class TabBarTop extends React.PureComponent<
       iconStyle,
       /* eslint-enable @typescript-eslint/no-unused-vars */
       ...rest
-    } = this.props;
+    } = this.props
 
     return (
       <TabBar
@@ -97,7 +97,7 @@ export default class TabBarTop extends React.PureComponent<
         renderIcon={this._renderIcon}
         renderLabel={this._renderLabel}
       />
-    );
+    )
   }
 }
 
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
     margin: 4,
     backgroundColor: 'transparent',
   },
-});
+})

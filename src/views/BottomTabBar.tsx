@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Animated,
   TouchableWithoutFeedback,
@@ -7,30 +7,30 @@ import {
   Keyboard,
   Platform,
   LayoutChangeEvent,
-} from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
-import { ThemeColors, ThemeContext, NavigationRoute } from 'react-navigation';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { ThemeColors, ThemeContext, NavigationRoute } from 'react-navigation'
 
-import CrossFadeIcon from './CrossFadeIcon';
-import withDimensions from '../utils/withDimensions';
+import CrossFadeIcon from './CrossFadeIcon'
+import withDimensions from '../utils/withDimensions'
 import {
   BottomTabBarProps,
   ButtonComponentProps,
   KeyboardHidesTabBarAnimationConfig,
   KeyboardAnimationConfig,
-} from '../types';
+} from '../types'
 
 type State = {
-  layout: { height: number; width: number };
-  keyboard: boolean;
-  visible: Animated.Value;
-};
+  layout: { height: number; width: number }
+  keyboard: boolean
+  visible: Animated.Value
+}
 
-const majorVersion = parseInt(Platform.Version as string, 10);
-const isIos = Platform.OS === 'ios';
-const isIOS11 = majorVersion >= 11 && isIos;
+const majorVersion = parseInt(Platform.Version as string, 10)
+const isIos = Platform.OS === 'ios'
+const isIOS11 = majorVersion >= 11 && isIos
 
-const DEFAULT_MAX_TAB_ITEM_WIDTH = 125;
+const DEFAULT_MAX_TAB_ITEM_WIDTH = 125
 const DEFAULT_KEYBOARD_ANIMATION_CONFIG: KeyboardHidesTabBarAnimationConfig = {
   show: {
     animation: 'timing',
@@ -46,7 +46,7 @@ const DEFAULT_KEYBOARD_ANIMATION_CONFIG: KeyboardHidesTabBarAnimationConfig = {
       duration: 100,
     },
   },
-};
+}
 
 class TouchableWithoutFeedbackWrapper extends React.Component<
   ButtonComponentProps
@@ -64,7 +64,7 @@ class TouchableWithoutFeedbackWrapper extends React.Component<
       accessibilityRole,
       accessibilityStates,
       ...rest
-    } = this.props;
+    } = this.props
 
     return (
       <TouchableWithoutFeedback
@@ -78,7 +78,7 @@ class TouchableWithoutFeedbackWrapper extends React.Component<
       >
         <View {...rest} />
       </TouchableWithoutFeedback>
-    );
+    )
   }
 }
 
@@ -100,53 +100,51 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
     showIcon: true,
     allowFontScaling: true,
     adaptive: isIOS11,
-    safeAreaInset: { bottom: 'always', top: 'never' } as React.ComponentProps<
-      typeof SafeAreaView
-    >['forceInset'],
-  };
+    safeAreaInset: ['bottom'],
+  }
 
   // eslint-disable-next-line react/sort-comp
-  static contextType = ThemeContext;
+  static contextType = ThemeContext
 
   state = {
     layout: { height: 0, width: 0 },
     keyboard: false,
     visible: new Animated.Value(1),
-  };
+  }
 
   componentDidMount() {
     if (Platform.OS === 'ios') {
-      Keyboard.addListener('keyboardWillShow', this._handleKeyboardShow);
-      Keyboard.addListener('keyboardWillHide', this._handleKeyboardHide);
+      Keyboard.addListener('keyboardWillShow', this._handleKeyboardShow)
+      Keyboard.addListener('keyboardWillHide', this._handleKeyboardHide)
     } else {
-      Keyboard.addListener('keyboardDidShow', this._handleKeyboardShow);
-      Keyboard.addListener('keyboardDidHide', this._handleKeyboardHide);
+      Keyboard.addListener('keyboardDidShow', this._handleKeyboardShow)
+      Keyboard.addListener('keyboardDidHide', this._handleKeyboardHide)
     }
   }
 
   componentWillUnmount() {
     if (Platform.OS === 'ios') {
-      Keyboard.removeListener('keyboardWillShow', this._handleKeyboardShow);
-      Keyboard.removeListener('keyboardWillHide', this._handleKeyboardHide);
+      Keyboard.removeListener('keyboardWillShow', this._handleKeyboardShow)
+      Keyboard.removeListener('keyboardWillHide', this._handleKeyboardHide)
     } else {
-      Keyboard.removeListener('keyboardDidShow', this._handleKeyboardShow);
-      Keyboard.removeListener('keyboardDidHide', this._handleKeyboardHide);
+      Keyboard.removeListener('keyboardDidShow', this._handleKeyboardShow)
+      Keyboard.removeListener('keyboardDidHide', this._handleKeyboardHide)
     }
   }
 
   // @ts-ignore
-  context: 'light' | 'dark';
+  context: 'light' | 'dark'
 
   _getKeyboardAnimationConfigByType = (
     type: keyof KeyboardHidesTabBarAnimationConfig
   ): KeyboardAnimationConfig => {
-    const { keyboardHidesTabBarAnimationConfig } = this.props;
+    const { keyboardHidesTabBarAnimationConfig } = this.props
     const defaultKeyboardAnimationConfig =
-      DEFAULT_KEYBOARD_ANIMATION_CONFIG[type];
+      DEFAULT_KEYBOARD_ANIMATION_CONFIG[type]
     const keyboardAnimationConfig =
       (keyboardHidesTabBarAnimationConfig &&
         keyboardHidesTabBarAnimationConfig[type]) ||
-      defaultKeyboardAnimationConfig;
+      defaultKeyboardAnimationConfig
 
     // merge config only `timing` animation
     if (
@@ -160,42 +158,40 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
           ...defaultKeyboardAnimationConfig.config,
           ...keyboardAnimationConfig.config,
         },
-      };
+      }
     }
 
-    return keyboardAnimationConfig as KeyboardAnimationConfig;
-  };
+    return keyboardAnimationConfig as KeyboardAnimationConfig
+  }
 
   _handleKeyboardShow = () => {
     this.setState({ keyboard: true }, () => {
       const { animation, config } = this._getKeyboardAnimationConfigByType(
         'show'
-      );
+      )
       Animated[animation](this.state.visible, {
         toValue: 0,
         ...config,
-      }).start();
-    });
-  };
+      }).start()
+    })
+  }
 
   _handleKeyboardHide = () => {
-    const { animation, config } = this._getKeyboardAnimationConfigByType(
-      'hide'
-    );
+    const { animation, config } = this._getKeyboardAnimationConfigByType('hide')
     Animated[animation](this.state.visible, {
       toValue: 1,
       ...config,
     }).start(() => {
-      this.setState({ keyboard: false });
-    });
-  };
+      this.setState({ keyboard: false })
+    })
+  }
 
   _handleLayout = (e: LayoutChangeEvent) => {
-    const { layout } = this.state;
-    const { height, width } = e.nativeEvent.layout;
+    const { layout } = this.state
+    const { height, width } = e.nativeEvent.layout
 
     if (height === layout.height && width === layout.width) {
-      return;
+      return
     }
 
     this.setState({
@@ -203,71 +199,71 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
         height,
         width,
       },
-    });
-  };
+    })
+  }
 
   _getActiveTintColor = () => {
-    let { activeTintColor } = this.props;
+    let { activeTintColor } = this.props
     if (!activeTintColor) {
-      return;
+      return
     } else if (typeof activeTintColor === 'string') {
-      return activeTintColor;
+      return activeTintColor
     }
 
-    return activeTintColor[this.context];
-  };
+    return activeTintColor[this.context]
+  }
 
   _getInactiveTintColor = () => {
-    let { inactiveTintColor } = this.props;
+    let { inactiveTintColor } = this.props
     if (!inactiveTintColor) {
-      return;
+      return
     } else if (typeof inactiveTintColor === 'string') {
-      return inactiveTintColor;
+      return inactiveTintColor
     }
 
-    return inactiveTintColor[this.context];
-  };
+    return inactiveTintColor[this.context]
+  }
 
   _getActiveBackgroundColor = () => {
-    let { activeBackgroundColor } = this.props;
+    let { activeBackgroundColor } = this.props
     if (!activeBackgroundColor) {
-      return;
+      return
     } else if (typeof activeBackgroundColor === 'string') {
-      return activeBackgroundColor;
+      return activeBackgroundColor
     }
 
-    return activeBackgroundColor[this.context];
-  };
+    return activeBackgroundColor[this.context]
+  }
 
   _getInactiveBackgroundColor = () => {
-    let { inactiveBackgroundColor } = this.props;
+    let { inactiveBackgroundColor } = this.props
     if (!inactiveBackgroundColor) {
-      return;
+      return
     } else if (typeof inactiveBackgroundColor === 'string') {
-      return inactiveBackgroundColor;
+      return inactiveBackgroundColor
     }
 
-    return inactiveBackgroundColor[this.context];
-  };
+    return inactiveBackgroundColor[this.context]
+  }
 
   _renderLabel = ({
     route,
     focused,
   }: {
-    route: NavigationRoute;
-    focused: boolean;
+    route: NavigationRoute
+    focused: boolean
   }) => {
-    const { labelStyle, showLabel, showIcon, allowFontScaling } = this.props;
+    const { labelStyle, showLabel, showIcon, allowFontScaling } = this.props
 
     if (showLabel === false) {
-      return null;
+      return null
     }
 
-    const activeTintColor = this._getActiveTintColor();
-    const inactiveTintColor = this._getInactiveTintColor();
-    const label = this.props.getLabelText({ route });
-    const tintColor = focused ? activeTintColor : inactiveTintColor;
-    const horizontal = this._shouldUseHorizontalLabels();
+    const activeTintColor = this._getActiveTintColor()
+    const inactiveTintColor = this._getInactiveTintColor()
+    const label = this.props.getLabelText({ route })
+    const tintColor = focused ? activeTintColor : inactiveTintColor
+    const horizontal = this._shouldUseHorizontalLabels()
 
     if (typeof label === 'string') {
       return (
@@ -283,7 +279,7 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
         >
           {label}
         </Animated.Text>
-      );
+      )
     }
 
     if (typeof label === 'function') {
@@ -291,31 +287,31 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
         focused,
         tintColor,
         orientation: horizontal ? 'horizontal' : 'vertical',
-      });
+      })
     }
 
-    return label;
-  };
+    return label
+  }
 
   _renderIcon = ({
     route,
     focused,
   }: {
-    route: NavigationRoute;
-    focused: boolean;
+    route: NavigationRoute
+    focused: boolean
   }) => {
-    const { renderIcon, showIcon, showLabel } = this.props;
+    const { renderIcon, showIcon, showLabel } = this.props
 
     if (showIcon === false) {
-      return null;
+      return null
     }
 
-    const horizontal = this._shouldUseHorizontalLabels();
+    const horizontal = this._shouldUseHorizontalLabels()
 
-    const activeTintColor = this._getActiveTintColor();
-    const inactiveTintColor = this._getInactiveTintColor();
-    const activeOpacity = focused ? 1 : 0;
-    const inactiveOpacity = focused ? 0 : 1;
+    const activeTintColor = this._getActiveTintColor()
+    const inactiveTintColor = this._getInactiveTintColor()
+    const activeOpacity = focused ? 1 : 0
+    const inactiveOpacity = focused ? 0 : 1
 
     return (
       <CrossFadeIcon
@@ -332,57 +328,57 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
           showLabel !== false && !horizontal && styles.iconWithLabel,
         ]}
       />
-    );
-  };
+    )
+  }
 
   _shouldUseHorizontalLabels = () => {
-    const { routes } = this.props.navigation.state;
+    const { routes } = this.props.navigation.state
     const {
       isLandscape,
       dimensions,
       adaptive,
       tabStyle,
       labelPosition,
-    } = this.props;
+    } = this.props
 
     if (labelPosition) {
-      let position;
+      let position
       if (typeof labelPosition === 'string') {
-        position = labelPosition;
+        position = labelPosition
       } else {
         position = labelPosition({
           deviceOrientation: isLandscape ? 'horizontal' : 'vertical',
-        });
+        })
       }
 
       if (position) {
-        return position === 'beside-icon';
+        return position === 'beside-icon'
       }
     }
 
     if (!adaptive) {
-      return false;
+      return false
     }
 
     // @ts-ignore
     if (Platform.isPad) {
-      let maxTabItemWidth = DEFAULT_MAX_TAB_ITEM_WIDTH;
+      let maxTabItemWidth = DEFAULT_MAX_TAB_ITEM_WIDTH
 
-      const flattenedStyle = StyleSheet.flatten(tabStyle);
+      const flattenedStyle = StyleSheet.flatten(tabStyle)
 
       if (flattenedStyle) {
         if (typeof flattenedStyle.width === 'number') {
-          maxTabItemWidth = flattenedStyle.width;
+          maxTabItemWidth = flattenedStyle.width
         } else if (typeof flattenedStyle.maxWidth === 'number') {
-          maxTabItemWidth = flattenedStyle.maxWidth;
+          maxTabItemWidth = flattenedStyle.maxWidth
         }
       }
 
-      return routes.length * maxTabItemWidth <= dimensions.width;
+      return routes.length * maxTabItemWidth <= dimensions.width
     } else {
-      return isLandscape;
+      return isLandscape
     }
-  };
+  }
 
   render() {
     const {
@@ -393,13 +389,13 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
       safeAreaInset,
       style,
       tabStyle,
-    } = this.props;
+    } = this.props
 
-    const { routes } = navigation.state;
-    const isDark = this.context === 'dark';
+    const { routes } = navigation.state
+    const isDark = this.context === 'dark'
 
-    const activeBackgroundColor = this._getActiveBackgroundColor();
-    const inactiveBackgroundColor = this._getInactiveBackgroundColor();
+    const activeBackgroundColor = this._getActiveBackgroundColor()
+    const inactiveBackgroundColor = this._getInactiveBackgroundColor()
 
     const {
       position,
@@ -415,7 +411,7 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
       marginHorizontal,
       marginVertical,
       ...innerStyle
-    } = StyleSheet.flatten(style || {});
+    } = StyleSheet.flatten(style || {})
 
     const containerStyle = {
       position,
@@ -430,7 +426,7 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
       marginRight,
       marginHorizontal,
       marginVertical,
-    };
+    }
 
     const tabBarStyle = [
       styles.tabBar,
@@ -440,7 +436,7 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
         ? styles.tabBarCompact
         : styles.tabBarRegular,
       innerStyle,
-    ];
+    ]
 
     return (
       <Animated.View
@@ -469,31 +465,29 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
         }
         onLayout={this._handleLayout}
       >
-        <SafeAreaView style={tabBarStyle} forceInset={safeAreaInset}>
+        <SafeAreaView style={tabBarStyle} edges={['bottom']}>
           {routes.map((route, index) => {
-            const focused = index === navigation.state.index;
-            const scene = { route, focused };
+            const focused = index === navigation.state.index
+            const scene = { route, focused }
             const accessibilityLabel = this.props.getAccessibilityLabel({
               route,
-            });
+            })
 
             const accessibilityRole = this.props.getAccessibilityRole({
               route,
-            });
+            })
 
-            const accessibilityStates = this.props.getAccessibilityStates(
-              scene
-            );
+            const accessibilityStates = this.props.getAccessibilityStates(scene)
 
-            const testID = this.props.getTestID({ route });
+            const testID = this.props.getTestID({ route })
 
             const backgroundColor = focused
               ? activeBackgroundColor
-              : inactiveBackgroundColor;
+              : inactiveBackgroundColor
 
             const ButtonComponent =
               this.props.getButtonComponent({ route }) ||
-              TouchableWithoutFeedbackWrapper;
+              TouchableWithoutFeedbackWrapper
 
             return (
               <ButtonComponent
@@ -518,16 +512,16 @@ class TabBarBottom extends React.Component<BottomTabBarProps, State> {
                 {this._renderIcon(scene)}
                 {this._renderLabel(scene)}
               </ButtonComponent>
-            );
+            )
           })}
         </SafeAreaView>
       </Animated.View>
-    );
+    )
   }
 }
 
-const DEFAULT_HEIGHT = 49;
-const COMPACT_HEIGHT = 29;
+const DEFAULT_HEIGHT = 49
+const COMPACT_HEIGHT = 29
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -585,6 +579,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 20,
   },
-});
+})
 
-export default withDimensions(TabBarBottom);
+export default withDimensions(TabBarBottom)

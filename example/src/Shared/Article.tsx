@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
+import * as React from 'react'
+import { View, Text, Image, ScrollView, StyleSheet } from 'react-native'
 
 export default class Article extends React.Component {
   render() {
@@ -40,7 +40,7 @@ export default class Article extends React.Component {
           section 1.10.32.
         </Text>
       </ScrollView>
-    );
+    )
   }
 }
 
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginVertical: 8,
   },
-});
+})

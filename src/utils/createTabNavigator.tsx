@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
   TabRouter,
   StackActions,
@@ -9,47 +9,47 @@ import {
   NavigationRouteConfigMap,
   CreateNavigatorConfig,
   NavigationTabRouterConfig,
-} from 'react-navigation';
+} from 'react-navigation'
 import {
   NavigationTabProp,
   NavigationCommonTabOptions,
   SceneDescriptorMap,
-} from '../types';
+} from '../types'
 
 type RouteConfig<Options> = NavigationRouteConfigMap<
   Options,
   NavigationTabProp<NavigationRoute, any>
->;
+>
 
 type CommonProps = {
-  navigation: NavigationTabProp;
-  descriptors: SceneDescriptorMap;
-  screenProps?: unknown;
-};
+  navigation: NavigationTabProp
+  descriptors: SceneDescriptorMap
+  screenProps?: unknown
+}
 
 type ExtraProps<Config extends {}> = {
-  navigationConfig: Config;
-};
+  navigationConfig: Config
+}
 
 export type RenderIconProps = {
-  route: NavigationRoute;
-  focused: boolean;
-  tintColor?: string;
-  horizontal?: boolean;
-};
+  route: NavigationRoute
+  focused: boolean
+  tintColor?: string
+  horizontal?: boolean
+}
 
 export type NavigationViewProps = {
-  getLabelText: (props: { route: NavigationRoute }) => string | undefined;
+  getLabelText: (props: { route: NavigationRoute }) => string | undefined
   getAccessibilityLabel: (props: {
-    route: NavigationRoute;
-  }) => string | undefined;
-  getTestID: (props: { route: NavigationRoute }) => string | undefined;
-  renderIcon: (props: RenderIconProps) => React.ReactNode;
-  renderScene: (props: { route: NavigationRoute }) => React.ReactNode;
-  onIndexChange: (index: number) => void;
-  onTabPress: (props: { route: NavigationRoute }) => void;
-  onTabLongPress: (props: { route: NavigationRoute }) => void;
-};
+    route: NavigationRoute
+  }) => string | undefined
+  getTestID: (props: { route: NavigationRoute }) => string | undefined
+  renderIcon: (props: RenderIconProps) => React.ReactNode
+  renderScene: (props: { route: NavigationRoute }) => React.ReactNode
+  onIndexChange: (index: number) => void
+  onTabPress: (props: { route: NavigationRoute }) => void
+  onTabLongPress: (props: { route: NavigationRoute }) => void
+}
 
 export default function createTabNavigator<
   Config extends {},
@@ -60,17 +60,17 @@ export default function createTabNavigator<
     Exclude<Props, NavigationViewProps> & ExtraProps<Config>
   > {
     _renderScene = ({ route }: { route: { key: string } }) => {
-      const { screenProps, descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const TabComponent = descriptor.getComponent();
+      const { screenProps, descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const TabComponent = descriptor.getComponent()
       return (
         <SceneView
           screenProps={screenProps}
           navigation={descriptor.navigation}
           component={TabComponent}
         />
-      );
-    };
+      )
+    }
 
     _renderIcon = ({
       route,
@@ -78,138 +78,136 @@ export default function createTabNavigator<
       tintColor,
       horizontal = false,
     }: RenderIconProps) => {
-      const { descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const options = descriptor.options;
+      const { descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const options = descriptor.options
 
       if (options.tabBarIcon) {
         return typeof options.tabBarIcon === 'function'
           ? options.tabBarIcon({ focused, tintColor, horizontal })
-          : options.tabBarIcon;
+          : options.tabBarIcon
       }
 
-      return null;
-    };
+      return null
+    }
 
     _getLabelText = ({ route }: { route: NavigationRoute }) => {
-      const { descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const options = descriptor.options;
+      const { descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const options = descriptor.options
 
       if (options.tabBarLabel) {
-        return options.tabBarLabel;
+        return options.tabBarLabel
       }
 
       if (typeof options.title === 'string') {
-        return options.title;
+        return options.title
       }
 
-      return route.routeName;
-    };
+      return route.routeName
+    }
 
     _getAccessibilityLabel = ({ route }: { route: NavigationRoute }) => {
-      const { descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const options = descriptor.options;
+      const { descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const options = descriptor.options
 
       if (typeof options.tabBarAccessibilityLabel !== 'undefined') {
-        return options.tabBarAccessibilityLabel;
+        return options.tabBarAccessibilityLabel
       }
 
-      const label = this._getLabelText({ route });
+      const label = this._getLabelText({ route })
 
       if (typeof label === 'string') {
-        const { routes } = this.props.navigation.state;
-        return `${label}, tab, ${routes.indexOf(route) + 1} of ${
-          routes.length
-        }`;
+        const { routes } = this.props.navigation.state
+        return `${label}, tab, ${routes.indexOf(route) + 1} of ${routes.length}`
       }
 
-      return undefined;
-    };
+      return undefined
+    }
 
     _getTestID = ({ route }: { route: NavigationRoute }) => {
-      const { descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const options = descriptor.options;
+      const { descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const options = descriptor.options
 
-      return options.tabBarTestID;
-    };
+      return options.tabBarTestID
+    }
 
     _makeDefaultHandler = ({
       route,
       navigation,
     }: {
-      route: NavigationRoute;
-      navigation: NavigationTabProp;
+      route: NavigationRoute
+      navigation: NavigationTabProp
     }) => () => {
       if (navigation.isFocused()) {
         if (route.hasOwnProperty('index') && route.index > 0) {
           // If current tab has a nested navigator, pop to top
-          navigation.dispatch(StackActions.popToTop({ key: route.key }));
+          navigation.dispatch(StackActions.popToTop({ key: route.key }))
         } else {
-          navigation.emit('refocus');
+          navigation.emit('refocus')
         }
       } else {
-        this._jumpTo(route.routeName);
+        this._jumpTo(route.routeName)
       }
-    };
+    }
 
     _handleTabPress = ({ route }: { route: NavigationRoute }) => {
-      this._isTabPress = true;
+      this._isTabPress = true
 
       // After tab press, handleIndexChange will be called synchronously
       // So we reset it in promise callback
-      Promise.resolve().then(() => (this._isTabPress = false));
+      Promise.resolve().then(() => (this._isTabPress = false))
 
-      const { descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const { navigation, options } = descriptor;
+      const { descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const { navigation, options } = descriptor
 
-      const defaultHandler = this._makeDefaultHandler({ route, navigation });
+      const defaultHandler = this._makeDefaultHandler({ route, navigation })
 
       if (options.tabBarOnPress) {
-        options.tabBarOnPress({ navigation, defaultHandler });
+        options.tabBarOnPress({ navigation, defaultHandler })
       } else {
-        defaultHandler();
+        defaultHandler()
       }
-    };
+    }
 
     _handleTabLongPress = ({ route }: { route: NavigationRoute }) => {
-      const { descriptors } = this.props;
-      const descriptor = descriptors[route.key];
-      const { navigation, options } = descriptor;
+      const { descriptors } = this.props
+      const descriptor = descriptors[route.key]
+      const { navigation, options } = descriptor
 
-      const defaultHandler = this._makeDefaultHandler({ route, navigation });
+      const defaultHandler = this._makeDefaultHandler({ route, navigation })
 
       if (options.tabBarOnLongPress) {
-        options.tabBarOnLongPress({ navigation, defaultHandler });
+        options.tabBarOnLongPress({ navigation, defaultHandler })
       } else {
-        defaultHandler();
+        defaultHandler()
       }
-    };
+    }
 
     _handleIndexChange = (index: number) => {
       if (this._isTabPress) {
-        this._isTabPress = false;
-        return;
+        this._isTabPress = false
+        return
       }
 
-      this._jumpTo(this.props.navigation.state.routes[index].routeName);
-    };
+      this._jumpTo(this.props.navigation.state.routes[index].routeName)
+    }
 
     _jumpTo = (routeName: string) => {
-      const { navigation } = this.props;
+      const { navigation } = this.props
 
       navigation.dispatch(
         SwitchActions.jumpTo({
           routeName,
           key: navigation.state.key,
         })
-      );
-    };
+      )
+    }
 
-    _isTabPress: boolean = false;
+    _isTabPress: boolean = false
 
     render() {
       const {
@@ -217,10 +215,10 @@ export default function createTabNavigator<
         navigation,
         screenProps,
         navigationConfig,
-      } = this.props;
-      const { state } = navigation;
-      const route = state.routes[state.index];
-      const descriptor = descriptors[route.key];
+      } = this.props
+      const { state } = navigation
+      const route = state.routes[state.index]
+      const descriptor = descriptors[route.key]
 
       return (
         // TODO: don't have time to fix it right now
@@ -240,7 +238,7 @@ export default function createTabNavigator<
           descriptors={descriptors}
           screenProps={screenProps}
         />
-      );
+      )
     }
   }
 
@@ -253,8 +251,8 @@ export default function createTabNavigator<
       NavigationTabProp<NavigationRoute, any>
     > = {}
   ) => {
-    const router = TabRouter(routes, config as any);
+    const router = TabRouter(routes, config as any)
 
-    return createNavigator(NavigationView as any, router, config as any);
-  };
+    return createNavigator(NavigationView as any, router, config as any)
+  }
 }

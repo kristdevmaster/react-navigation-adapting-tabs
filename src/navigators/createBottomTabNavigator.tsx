@@ -1,50 +1,50 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
   View,
   StyleSheet,
   AccessibilityRole,
   AccessibilityState,
-} from 'react-native';
-import { NavigationRoute } from 'react-navigation';
+} from 'react-native'
+import { NavigationRoute } from 'react-navigation'
 
 // eslint-disable-next-line import/no-unresolved
-import { ScreenContainer } from 'react-native-screens';
+import { ScreenContainer } from 'react-native-screens'
 
 import createTabNavigator, {
   NavigationViewProps,
-} from '../utils/createTabNavigator';
-import BottomTabBar from '../views/BottomTabBar';
-import ResourceSavingScene from '../views/ResourceSavingScene';
+} from '../utils/createTabNavigator'
+import BottomTabBar from '../views/BottomTabBar'
+import ResourceSavingScene from '../views/ResourceSavingScene'
 import {
   NavigationTabProp,
   NavigationBottomTabOptions,
   BottomTabBarOptions,
   SceneDescriptorMap,
-} from '../types';
+} from '../types'
 
 type Config = {
-  lazy?: boolean;
-  tabBarComponent?: React.ComponentType<any>;
-  tabBarOptions?: BottomTabBarOptions;
-};
+  lazy?: boolean
+  tabBarComponent?: React.ComponentType<any>
+  tabBarOptions?: BottomTabBarOptions
+}
 
 type Props = NavigationViewProps &
   Config & {
     getAccessibilityRole: (props: {
-      route: NavigationRoute;
-    }) => AccessibilityRole | undefined;
+      route: NavigationRoute
+    }) => AccessibilityRole | undefined
     getAccessibilityStates: (props: {
-      route: NavigationRoute;
-      focused: boolean;
-    }) => AccessibilityState[];
-    navigation: NavigationTabProp;
-    descriptors: SceneDescriptorMap;
-    screenProps?: unknown;
-  };
+      route: NavigationRoute
+      focused: boolean
+    }) => AccessibilityState[]
+    navigation: NavigationTabProp
+    descriptors: SceneDescriptorMap
+    screenProps?: unknown
+  }
 
 type State = {
-  loaded: number[];
-};
+  loaded: number[]
+}
 
 class TabNavigationView extends React.PureComponent<Props, State> {
   static defaultProps = {
@@ -53,36 +53,36 @@ class TabNavigationView extends React.PureComponent<Props, State> {
     getAccessibilityStates: ({
       focused,
     }: {
-      focused: boolean;
+      focused: boolean
     }): AccessibilityState[] => (focused ? ['selected'] : []),
-  };
+  }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    const { index } = nextProps.navigation.state;
+    const { index } = nextProps.navigation.state
 
     return {
       // Set the current tab to be loaded if it was not loaded before
       loaded: prevState.loaded.includes(index)
         ? prevState.loaded
         : [...prevState.loaded, index],
-    };
+    }
   }
 
   state = {
     loaded: [this.props.navigation.state.index],
-  };
+  }
 
   _getButtonComponent = ({ route }: { route: NavigationRoute }) => {
-    const { descriptors } = this.props;
-    const descriptor = descriptors[route.key];
-    const options = descriptor.options;
+    const { descriptors } = this.props
+    const descriptor = descriptors[route.key]
+    const options = descriptor.options
 
     if (options.tabBarButtonComponent) {
-      return options.tabBarButtonComponent;
+      return options.tabBarButtonComponent
     }
 
-    return undefined;
-  };
+    return undefined
+  }
 
   _renderTabBar = () => {
     const {
@@ -98,16 +98,16 @@ class TabNavigationView extends React.PureComponent<Props, State> {
       renderIcon,
       onTabPress,
       onTabLongPress,
-    } = this.props;
+    } = this.props
 
-    const { descriptors } = this.props;
-    const { state } = this.props.navigation;
-    const route = state.routes[state.index];
-    const descriptor = descriptors[route.key];
-    const options = descriptor.options;
+    const { descriptors } = this.props
+    const { state } = this.props.navigation
+    const route = state.routes[state.index]
+    const descriptor = descriptors[route.key]
+    const options = descriptor.options
 
     if (options.tabBarVisible === false) {
-      return null;
+      return null
     }
 
     return (
@@ -126,21 +126,21 @@ class TabNavigationView extends React.PureComponent<Props, State> {
         getTestID={getTestID}
         renderIcon={renderIcon}
       />
-    );
-  };
+    )
+  }
 
   _jumpTo = (key: string) => {
-    const { navigation, onIndexChange } = this.props;
+    const { navigation, onIndexChange } = this.props
 
-    const index = navigation.state.routes.findIndex(route => route.key === key);
+    const index = navigation.state.routes.findIndex(route => route.key === key)
 
-    onIndexChange(index);
-  };
+    onIndexChange(index)
+  }
 
   render() {
-    const { navigation, renderScene, lazy } = this.props;
-    const { routes } = navigation.state;
-    const { loaded } = this.state;
+    const { navigation, renderScene, lazy } = this.props
+    const { routes } = navigation.state
+    const { loaded } = this.state
 
     return (
       <View style={styles.container}>
@@ -148,10 +148,10 @@ class TabNavigationView extends React.PureComponent<Props, State> {
           {routes.map((route, index) => {
             if (lazy && !loaded.includes(index)) {
               // Don't render a screen if we've never navigated to it
-              return null;
+              return null
             }
 
-            const isFocused = navigation.state.index === index;
+            const isFocused = navigation.state.index === index
 
             return (
               <ResourceSavingScene
@@ -161,12 +161,12 @@ class TabNavigationView extends React.PureComponent<Props, State> {
               >
                 {renderScene({ route })}
               </ResourceSavingScene>
-            );
+            )
           })}
         </ScreenContainer>
         {this._renderTabBar()}
       </View>
-    );
+    )
   }
 }
 
@@ -178,8 +178,8 @@ const styles = StyleSheet.create({
   pages: {
     flex: 1,
   },
-});
+})
 
 export default createTabNavigator<Config, NavigationBottomTabOptions, Props>(
   TabNavigationView
-);
+)

@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { View, Image, Text, ScrollView, StyleSheet } from 'react-native';
+import * as React from 'react'
+import { View, Image, Text, ScrollView, StyleSheet } from 'react-native'
 
 const MESSAGES = [
   'okay',
   'sudo make me a sandwich',
   'what? make it yourself',
   'make me a sandwich',
-];
+]
 
 export default class Chat extends React.Component {
   render() {
@@ -17,7 +17,7 @@ export default class Chat extends React.Component {
           contentContainerStyle={styles.content}
         >
           {MESSAGES.map((text, i) => {
-            const odd = i % 2;
+            const odd = i % 2
 
             return (
               <View
@@ -41,11 +41,11 @@ export default class Chat extends React.Component {
                   </Text>
                 </View>
               </View>
-            );
+            )
           })}
         </ScrollView>
       </View>
-    );
+    )
   }
 }
 
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   receivedText: {
     color: 'white',
   },
-});
+})

@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput } from 'react-native';
+import * as React from 'react'
+import { View, Text, StyleSheet, FlatList, TextInput } from 'react-native'
 
-type Item = { name: string; number: number };
+type Item = { name: string; number: number }
 
 const CONTACTS: Item[] = [
   { name: 'Marissa Castillo', number: 7766398169 },
@@ -54,13 +54,13 @@ const CONTACTS: Item[] = [
   { name: 'Nolan Figueroa', number: 9173443776 },
   { name: 'Sophia Gibbs', number: 6435942770 },
   { name: 'Vincent Sandoval', number: 2606111495 },
-];
+]
 
 class ContactItem extends React.PureComponent<{
-  item: Item;
+  item: Item
 }> {
   render() {
-    const { item } = this.props;
+    const { item } = this.props
 
     return (
       <View style={styles.item}>
@@ -74,14 +74,14 @@ class ContactItem extends React.PureComponent<{
           <Text style={styles.number}>{item.number}</Text>
         </View>
       </View>
-    );
+    )
   }
 }
 
 export default class Contacts extends React.Component {
-  _renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />;
+  _renderItem = ({ item }: { item: Item }) => <ContactItem item={item} />
 
-  _ItemSeparator = () => <View style={styles.separator} />;
+  _ItemSeparator = () => <View style={styles.separator} />
 
   render() {
     return (
@@ -97,7 +97,7 @@ export default class Contacts extends React.Component {
           ItemSeparatorComponent={this._ItemSeparator}
         />
       </>
-    );
+    )
   }
 }
 
@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   textInput: {
     height: 50,
   },
-});
+})

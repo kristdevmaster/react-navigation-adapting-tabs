@@ -1,28 +1,28 @@
-import * as React from 'react';
-import { registerRootComponent } from 'expo';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import * as React from 'react'
+import { registerRootComponent } from 'expo'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import {
   Assets as StackAssets,
   createStackNavigator,
   NavigationStackScreenProps,
-} from 'react-navigation-stack';
+} from 'react-navigation-stack'
 import {
   Themed,
   createAppContainer,
   ThemeColors,
   useTheme,
-} from 'react-navigation';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Asset } from 'expo-asset';
+} from 'react-navigation'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Asset } from 'expo-asset'
 
-import BottomTabs from './src/BottomTabs';
-import MaterialTopTabs from './src/MaterialTopTabs';
+import BottomTabs from './src/BottomTabs'
+import MaterialTopTabs from './src/MaterialTopTabs'
 
 // Load the back button etc
-Asset.loadAsync(StackAssets);
+Asset.loadAsync(StackAssets)
 
 const Home = (props: NavigationStackScreenProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
     <View>
@@ -42,8 +42,8 @@ const Home = (props: NavigationStackScreenProps) => {
       </TouchableOpacity>
       <Themed.StatusBar />
     </View>
-  );
-};
+  )
+}
 
 const List = createStackNavigator({
   Home: {
@@ -58,12 +58,12 @@ const List = createStackNavigator({
     screen: MaterialTopTabs,
     navigationOptions: { title: 'Material top tabs' },
   },
-});
+})
 
-const Navigation = createAppContainer(List);
+const Navigation = createAppContainer(List)
 
 const App = () => {
-  let [theme, setTheme] = React.useState<'light' | 'dark'>('light');
+  let [theme, setTheme] = React.useState<'light' | 'dark'>('light')
 
   return (
     <View style={styles.container}>
@@ -79,7 +79,7 @@ const App = () => {
             },
           ]}
           onPress={() => {
-            setTheme(theme === 'light' ? 'dark' : 'light');
+            setTheme(theme === 'light' ? 'dark' : 'light')
           }}
         >
           <MaterialCommunityIcons
@@ -90,8 +90,8 @@ const App = () => {
         </TouchableOpacity>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = {
   container: {
@@ -129,7 +129,7 @@ const styles = {
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: ThemeColors.dark.bodyBorder,
   },
-};
+}
 
 // @ts-ignore
-registerRootComponent(App);
+registerRootComponent(App)

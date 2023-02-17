@@ -3,21 +3,21 @@
  */
 export {
   default as createBottomTabNavigator,
-} from './navigators/createBottomTabNavigator';
+} from './navigators/createBottomTabNavigator'
 export {
   default as createMaterialTopTabNavigator,
-} from './navigators/createMaterialTopTabNavigator';
+} from './navigators/createMaterialTopTabNavigator'
 
 /**
  * Views
  */
-export { default as BottomTabBar } from './views/BottomTabBar';
-export { default as MaterialTopTabBar } from './views/MaterialTopTabBar';
+export { default as BottomTabBar } from './views/BottomTabBar'
+export { default as MaterialTopTabBar } from './views/MaterialTopTabBar'
 
 /**
  * Utils
  */
-export { default as createTabNavigator } from './utils/createTabNavigator';
+export { default as createTabNavigator } from './utils/createTabNavigator'
 
 /**
  * Types
@@ -31,4 +31,4 @@ export {
   NavigationMaterialTabOptions,
   NavigationBottomTabScreenComponent,
   NavigationMaterialTabScreenComponent,
-} from './types';
+} from './types'

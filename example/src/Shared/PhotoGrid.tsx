@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
   View,
   Image,
@@ -8,54 +8,54 @@ import {
   StyleProp,
   ViewStyle,
   ScrollViewProperties,
-} from 'react-native';
+} from 'react-native'
 import {
   withNavigation,
   NavigationScreenProp,
   NavigationRoute,
   NavigationEventSubscription,
-} from 'react-navigation';
+} from 'react-navigation'
 
 class NavigationAwareScrollViewBase extends React.Component<{
-  navigation: NavigationScreenProp<NavigationRoute>;
-  contentContainerStyle: StyleProp<ViewStyle>;
+  navigation: NavigationScreenProp<NavigationRoute>
+  contentContainerStyle: StyleProp<ViewStyle>
 }> {
   componentDidMount() {
     this.subscription = this.props.navigation.addListener('refocus', () => {
       if (this.props.navigation.isFocused()) {
-        this.root.current && this.root.current.scrollTo({ x: 0, y: 0 });
+        this.root.current && this.root.current.scrollTo({ x: 0, y: 0 })
       }
-    });
+    })
   }
 
   componentWillUnmount() {
-    this.subscription && this.subscription.remove();
+    this.subscription && this.subscription.remove()
   }
 
   setNativeProps(props: ScrollViewProperties) {
     // @ts-ignore
-    this.root.current.setNativeProps(props);
+    this.root.current.setNativeProps(props)
   }
 
   getNode() {
-    return this.root.current;
+    return this.root.current
   }
 
-  private subscription: NavigationEventSubscription | undefined;
+  private subscription: NavigationEventSubscription | undefined
 
-  private root = React.createRef<ScrollView>();
+  private root = React.createRef<ScrollView>()
 
   render() {
-    return <ScrollView {...this.props} ref={this.root} />;
+    return <ScrollView {...this.props} ref={this.root} />
   }
 }
 
-const NavigationAwareScrollView = withNavigation(NavigationAwareScrollViewBase);
+const NavigationAwareScrollView = withNavigation(NavigationAwareScrollViewBase)
 
 export default function PhotoGrid({ id }: { id: string }) {
   const PHOTOS = Array.from({ length: 24 }).map(
     (_, i) => `https://unsplash.it/300/300/?random&__id=${id}${i}`
-  );
+  )
 
   return (
     <NavigationAwareScrollView contentContainerStyle={styles.content}>
@@ -65,7 +65,7 @@ export default function PhotoGrid({ id }: { id: string }) {
         </View>
       ))}
     </NavigationAwareScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
   },
-});
+})

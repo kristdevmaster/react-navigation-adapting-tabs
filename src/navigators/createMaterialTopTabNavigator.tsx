@@ -1,59 +1,59 @@
-import * as React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-import { TabView, SceneRendererProps } from 'react-native-tab-view';
+import * as React from 'react'
+import { StyleProp, ViewStyle } from 'react-native'
+import { TabView, SceneRendererProps } from 'react-native-tab-view'
 import createTabNavigator, {
   NavigationViewProps,
-} from '../utils/createTabNavigator';
-import MaterialTopTabBar from '../views/MaterialTopTabBar';
+} from '../utils/createTabNavigator'
+import MaterialTopTabBar from '../views/MaterialTopTabBar'
 import {
   NavigationTabProp,
   NavigationMaterialTabOptions,
   MaterialTabBarOptions,
   SceneDescriptorMap,
-} from '../types';
+} from '../types'
 
 type Route = {
-  key: string;
-  routeName: string;
-};
+  key: string
+  routeName: string
+}
 
 type Config = {
-  keyboardDismissMode?: 'none' | 'on-drag';
-  swipeEnabled?: boolean;
-  swipeDistanceThreshold?: number;
-  swipeVelocityThreshold?: number;
-  initialLayout?: { width?: number; height?: number };
-  lazy?: boolean;
-  lazyPlaceholderComponent?: React.ComponentType<{ route: Route }>;
+  keyboardDismissMode?: 'none' | 'on-drag'
+  swipeEnabled?: boolean
+  swipeDistanceThreshold?: number
+  swipeVelocityThreshold?: number
+  initialLayout?: { width?: number; height?: number }
+  lazy?: boolean
+  lazyPlaceholderComponent?: React.ComponentType<{ route: Route }>
   pagerComponent?: React.ComponentType<
     Parameters<React.ComponentProps<typeof TabView>['renderPager']>[0]
-  >;
-  tabBarComponent?: React.ComponentType<any>;
-  tabBarOptions?: MaterialTabBarOptions;
-  tabBarPosition?: 'top' | 'bottom';
-  sceneContainerStyle?: StyleProp<ViewStyle>;
-  style?: StyleProp<ViewStyle>;
-};
+  >
+  tabBarComponent?: React.ComponentType<any>
+  tabBarOptions?: MaterialTabBarOptions
+  tabBarPosition?: 'top' | 'bottom'
+  sceneContainerStyle?: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>
+}
 
 type Props = NavigationViewProps &
   Config & {
-    onSwipeStart?: () => void;
-    onSwipeEnd?: () => void;
-    navigation: NavigationTabProp;
-    descriptors: SceneDescriptorMap;
-    screenProps?: unknown;
-  };
+    onSwipeStart?: () => void
+    onSwipeEnd?: () => void
+    navigation: NavigationTabProp
+    descriptors: SceneDescriptorMap
+    screenProps?: unknown
+  }
 
 class MaterialTabView extends React.PureComponent<Props> {
   private renderTabBar = (props: SceneRendererProps) => {
-    const { state } = this.props.navigation;
-    const route = state.routes[state.index];
-    const { descriptors } = this.props;
-    const descriptor = descriptors[route.key];
-    const options = descriptor.options;
+    const { state } = this.props.navigation
+    const route = state.routes[state.index]
+    const { descriptors } = this.props
+    const descriptor = descriptors[route.key]
+    const options = descriptor.options
 
     const tabBarVisible =
-      options.tabBarVisible == null ? true : options.tabBarVisible;
+      options.tabBarVisible == null ? true : options.tabBarVisible
 
     const {
       navigation,
@@ -67,10 +67,10 @@ class MaterialTabView extends React.PureComponent<Props> {
       tabBarPosition,
       tabBarOptions,
       screenProps,
-    } = this.props;
+    } = this.props
 
     if (TabBarComponent === null || !tabBarVisible) {
-      return null;
+      return null
     }
 
     return (
@@ -87,8 +87,8 @@ class MaterialTabView extends React.PureComponent<Props> {
         onTabPress={onTabPress}
         onTabLongPress={onTabLongPress}
       />
-    );
-  };
+    )
+  }
 
   render() {
     const {
@@ -108,22 +108,22 @@ class MaterialTabView extends React.PureComponent<Props> {
       navigation,
       descriptors,
       ...rest
-    } = this.props;
+    } = this.props
 
-    const { state } = navigation;
-    const route = state.routes[state.index];
+    const { state } = navigation
+    const route = state.routes[state.index]
 
-    const descriptor = descriptors[route.key];
-    const options = descriptor.options;
+    const descriptor = descriptors[route.key]
+    const options = descriptor.options
 
     let swipeEnabled =
       // @ts-ignore
       options.swipeEnabled == null
         ? this.props.swipeEnabled
-        : (options as any).swipeEnabled;
+        : (options as any).swipeEnabled
 
     if (typeof swipeEnabled === 'function') {
-      swipeEnabled = swipeEnabled(state);
+      swipeEnabled = swipeEnabled(state)
     }
 
     return (
@@ -143,10 +143,10 @@ class MaterialTabView extends React.PureComponent<Props> {
             : undefined
         }
       />
-    );
+    )
   }
 }
 
 export default createTabNavigator<Config, NavigationMaterialTabOptions, Props>(
   MaterialTabView
-);
+)

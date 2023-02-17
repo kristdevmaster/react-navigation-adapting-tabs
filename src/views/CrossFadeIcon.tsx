@@ -1,23 +1,23 @@
-import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { NavigationRoute } from 'react-navigation';
+import React from 'react'
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { NavigationRoute } from 'react-navigation'
 
 type Props = {
-  route: NavigationRoute;
-  horizontal?: boolean;
-  activeOpacity: number;
-  inactiveOpacity: number;
-  activeTintColor?: string;
-  inactiveTintColor?: string;
+  route: NavigationRoute
+  horizontal?: boolean
+  activeOpacity: number
+  inactiveOpacity: number
+  activeTintColor?: string
+  inactiveTintColor?: string
   renderIcon: (props: {
-    route: NavigationRoute;
-    focused: boolean;
-    tintColor?: string;
-    horizontal?: boolean;
-  }) => React.ReactNode;
-  style: StyleProp<ViewStyle>;
-};
+    route: NavigationRoute
+    focused: boolean
+    tintColor?: string
+    horizontal?: boolean
+  }) => React.ReactNode
+  style: StyleProp<ViewStyle>
+}
 
 export default class TabBarIcon extends React.Component<Props> {
   render() {
@@ -30,7 +30,7 @@ export default class TabBarIcon extends React.Component<Props> {
       renderIcon,
       horizontal,
       style,
-    } = this.props;
+    } = this.props
 
     // We render the icon twice at the same position on top of each other:
     // active and inactive one, so we can fade between them.
@@ -53,7 +53,7 @@ export default class TabBarIcon extends React.Component<Props> {
           })}
         </Animated.View>
       </View>
-    );
+    )
   }
 }
 
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
     // Workaround for react-native >= 0.54 layout bug
     minWidth: 25,
   },
-});
+})
